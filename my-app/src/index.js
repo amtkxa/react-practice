@@ -2,34 +2,43 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 
-/* （子）Square コンポーネント */
-class Square extends React.Component {
-    // ボタンの描画
-    render() {
-        return (
-            // 呼び出し元の（親）BoardのonClickイベントを起動する
-            <button className="square" onClick={() => this.props.onClick()}>
-                {this.props.value}
-            </button>
-        );
-    }
+/* Square ファンクショナルコンポーネント */
+function Square(props) {
+    return (
+        <button className="square" onClick={props.onClick}>
+            {props.value}
+        </button>
+    );
 }
 
-/* （親）Board コンポーネント */
+/* Board コンポーネント */
 class Board extends React.Component {
     // コンストラクタ
     constructor() {
         super();
         this.state = {
-            squares: Array(9).fill(null),   // 正方形9つ分（初期値：null）
+            squares: Array(9).fill(null),
+            xIsNext: true,
         };
     }
 
     // 正方形の状態を更新
     handleClick(i) {
         const squares = this.state.squares.slice();
-        squares[i] = 'X';
-        this.setState({ squares: squares });
+
+        // 既に勝者が決まっていたり、もしくは既にクリックしたマス目であれば無視する
+        if (calculateWinner(squares) || squares[i]) {
+            return;
+        }
+
+        // 設定する記号の切り替え
+        squares[i] = this.state.xIsNext ? 'X' : 'O';
+
+        // 状態の設定、次のプレイヤーの反転
+        this.setState({
+            squares: squares,
+            xIsNext: !this.state.xIsNext,
+        });
     }
 
     // 正方形の描画
@@ -44,7 +53,13 @@ class Board extends React.Component {
 
     // 9個の Square コンポーネントを描画
     render() {
-        const status = 'Next player: X';
+        const winner = calculateWinner(this.state.squares);
+        let status;
+        if (winner) {
+            status = 'Winner: ' + winner;
+        } else {
+            status = 'Next player: ' + (this.state.xIsNext ? 'X' : 'O');
+        }
 
         return (
             <div>
@@ -85,6 +100,27 @@ class Game extends React.Component {
             </div>
         );
     }
+}
+
+// calculateWinner ファンクショナルコンポーネント
+function calculateWinner(squares) {
+    const lines = [
+        [0, 1, 2],
+        [3, 4, 5],
+        [6, 7, 8],
+        [0, 3, 6],
+        [1, 4, 7],
+        [2, 5, 8],
+        [0, 4, 8],
+        [2, 4, 6],
+    ];
+    for (let i = 0; i < lines.length; i++) {
+        const [a, b, c] = lines[i];
+        if (squares[a] && squares[a] === squares[b] && squares[a] === squares[c]) {
+            return squares[a];
+        }
+    }
+    return null;
 }
 
 // ========================================
