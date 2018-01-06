@@ -92,7 +92,7 @@ class Game extends React.Component {
         });
     }
 
-    // Board を一つレンダリングする
+    // 描画
     render() {
         const history = this.state.history;
         const current = history[this.state.stepNumber];
@@ -137,6 +137,7 @@ class Game extends React.Component {
 
 // calculateWinner ファンクショナルコンポーネント
 function calculateWinner(squares) {
+    // 直線が成立する座標
     const lines = [
         [0, 1, 2],
         [3, 4, 5],
@@ -147,9 +148,12 @@ function calculateWinner(squares) {
         [0, 4, 8],
         [2, 4, 6],
     ];
+
+    // 直線状態の成立を判定
     for (let i = 0; i < lines.length; i++) {
         const [a, b, c] = lines[i];
         if (squares[a] && squares[a] === squares[b] && squares[a] === squares[c]) {
+            // 該当の記号を返却
             return squares[a];
         }
     }
