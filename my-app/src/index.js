@@ -2,33 +2,47 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 
-/* Square コンポーネント */
+/* （子）Square コンポーネント */
 class Square extends React.Component {
-    // コンストラクタ
-    constructor() {
-        super();
-        this.state = {
-            value: null,
-        };
-    }
-
-    // <button>をレンダリングする
+    // ボタンの描画
     render() {
         return (
-            <button className="square" onClick={() => this.setState({ value: 'X' })}>
-                {this.state.value}
+            // 呼び出し元の（親）BoardのonClickイベントを起動する
+            <button className="square" onClick={() => this.props.onClick()}>
+                {this.props.value}
             </button>
         );
     }
 }
 
-/* Board コンポーネント */
+/* （親）Board コンポーネント */
 class Board extends React.Component {
-    renderSquare(i) {
-        return <Square value={i} />;
+    // コンストラクタ
+    constructor() {
+        super();
+        this.state = {
+            squares: Array(9).fill(null),   // 正方形9つ分（初期値：null）
+        };
     }
 
-    // 9個の Square コンポーネントをレンダリングする
+    // 正方形の状態を更新
+    handleClick(i) {
+        const squares = this.state.squares.slice();
+        squares[i] = 'X';
+        this.setState({ squares: squares });
+    }
+
+    // 正方形の描画
+    renderSquare(i) {
+        return (
+            <Square
+                value={this.state.squares[i]}
+                onClick={() => this.handleClick(i)}
+            />
+        );
+    }
+
+    // 9個の Square コンポーネントを描画
     render() {
         const status = 'Next player: X';
 
