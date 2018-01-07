@@ -6,12 +6,13 @@ class LikeButton extends React.Component {
         super(props);
         // コンポーネントにカーソルが乗ているかどうかの状態を持たせる
         this.state = {
-            hovered: false,
-            count: 999,   // カウント数の状態を追加
-            liked: false  // 押したかどうかの状態を追加
+            hovered: false, // オンカーソル状態
+            count: 999,     // カウント数
+            liked: false    // いいねの有無
         }
     }
 
+    // Facebookのいいねボタン用のスタイル
     styles() {
         return {
             container: {
@@ -85,11 +86,13 @@ class LikeButton extends React.Component {
         const likeStyle = this.state.hovered ? { ...styles.like, ...styles.likeHover } : styles.like;
         return (
             <span style={styles.container}>
+                {/* いいねボタン */}
                 <span
                     style={likeStyle}
                     onMouseEnter={this.onMouseEnter.bind(this)}
                     onMouseLeave={this.onMouseLeave.bind(this)}
                     onClick={this.onClick.bind(this)}>{this.state.liked ? "✔ " : ""}いいね！</span>
+                {/* いいねカウンタ */}
                 <span style={styles.counter}>
                     <span style={styles.counterBefore}>{" "}</span>
                     {this.state.count}
