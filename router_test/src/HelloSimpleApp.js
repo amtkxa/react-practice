@@ -5,7 +5,7 @@ import {
 } from 'react-router-dom'
 
 // React Routerを使用したメインコンポーネントの定義
-class HelloApp extends Component {
+class HelloSimpleApp extends Component {
     render() {
         return (
             <Router>
@@ -70,4 +70,4 @@ class Chinese extends Component {
     }
 }
 
-export default HelloApp
+export default HelloSimpleApp
